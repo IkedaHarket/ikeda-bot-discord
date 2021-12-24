@@ -1,0 +1,23 @@
+{
+  "name": "ikeda-bot-discord",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./app.js",
+    "dev": "nodemon ./app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IkedaHarket/ikeda-bot-discord.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IkedaHarket/ikeda-bot-discord/issues"
+  },
+  "homepage": "https://github.com/IkedaHarket/ikeda-bot-discord#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0"
+  }
+}
