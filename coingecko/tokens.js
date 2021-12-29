@@ -9,38 +9,44 @@ const getTokenPrice = async(token)=> await axios.get(`${coinGeckoApi}token_price
 
 const getPrice = async(cripto)=> await axios.get(`${coinGeckoApi}price?ids=${cripto}&vs_currencies=usd`)
 
-const getPriceToken = async(token) =>{
-    let data = {};
-    
-    switch (token) {
 
-        case 'SLP':
-            data = await getTokenPrice(SLP)
-            break;
-            
-        case 'MASTER':
-            data = await getTokenPrice(MASTER)
-        break;
-                
-        case 'BTC':
-        case 'BITCOIN':
-            data = await getPrice(BTC)
-        break;
+const fs = require('fs')
 
-        case 'SOL':
-        case 'SOLANA':
-            data = await getPrice(SOL)
-        break;
+let dataCoins = JSON.parse(fs.readFileSync('./coingecko/dataCoins.json'))
 
-        case 'TERRA':
-        case 'LUNA':
-            data = await getPrice(LUNA)
-        break;
-        
-        default:
-            return 'Moneda no agregada';
+let tokens = {};
+let cryptomonedas = {};
+
+for(let key in dataCoins){
+    if(typeof dataCoins[key] == 'object'){
+        tokens[key] = dataCoins[key]
+        continue;
     }
-    return Object.values(data.data)[0].usd
+    cryptomonedas[key] = dataCoins[key]
+}
+console.log()
+
+const getPriceToken = async(token) =>{
+
+    let resp = {resp: false};
+
+    Object.keys(cryptomonedas).find(coin => {
+        if(token === coin) resp = {resp:true, coin: cryptomonedas[coin]}
+    })
+    if(resp.resp) {
+        const {data} = await getPrice(resp.coin)
+        return Object.values(data)[0].usd
+    }
+    Object.keys(tokens).find(coin => {
+        if(token === coin) resp = {resp:true, coin: tokens[coin]}
+    })
+    if(resp.resp) {
+        const {data} = await getTokenPrice(resp.coin)
+        return Object.values(data)[0].usd
+    }
+
+
+    return "Moneda no agregada"
 }
 
 
