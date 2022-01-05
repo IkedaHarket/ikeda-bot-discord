@@ -1,3 +1,3 @@
 # ikeda-bot-discord
 
-nuevo readme
+nuevo readme Intento de fetch
