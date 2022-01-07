@@ -1,21 +1,17 @@
 const axios = require('axios').default;
+const fs = require('fs')
 
 const coinGeckoApi = 'https://api.coingecko.com/api/v3/simple/'
 
-const {SLP,MASTER,BTC, SOL, LUNA} = require('./dataCoins')
+let dataCoins = JSON.parse(fs.readFileSync('./coingecko/dataCoins.json'))
+let tokens = {};
+let cryptomonedas = {};
 
 
 const getTokenPrice = async(token)=> await axios.get(`${coinGeckoApi}token_price/${token.platform}?contract_addresses=${token.contract}&vs_currencies=usd`)
 
 const getPrice = async(cripto)=> await axios.get(`${coinGeckoApi}price?ids=${cripto}&vs_currencies=usd`)
 
-
-const fs = require('fs')
-
-let dataCoins = JSON.parse(fs.readFileSync('./coingecko/dataCoins.json'))
-
-let tokens = {};
-let cryptomonedas = {};
 
 for(let key in dataCoins){
     if(typeof dataCoins[key] == 'object'){
@@ -24,7 +20,6 @@ for(let key in dataCoins){
     }
     cryptomonedas[key] = dataCoins[key]
 }
-console.log()
 
 const getPriceToken = async(token) =>{
 
@@ -37,6 +32,7 @@ const getPriceToken = async(token) =>{
         const {data} = await getPrice(resp.coin)
         return Object.values(data)[0].usd
     }
+
     Object.keys(tokens).find(coin => {
         if(token === coin) resp = {resp:true, coin: tokens[coin]}
     })
